@@ -1,0 +1,87 @@
+<div class="container mx-auto px-4 py-6">
+  <div *ngIf="(employees$ | async) as employees">
+    <div *ngIf="employees.length > 0">
+      <form (ngSubmit)="onFormSubmit()" [formGroup]="employeeForm" class="bg-white p-6 rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold mb-6">Employee Form</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="employeeName" class="block text-lg font-semibold mb-2">Name</label>
+            <input type="text" id="employeeName" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" formControlName="employeeName"/>
+          </div>
+          <div>
+            <label for="dateOfBirth" class="block text-lg font-semibold mb-2">Date of Birth</label>
+            <input type="date" id="dateOfBirth" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" formControlName="dateOfBirth"/>
+          </div>
+          <div>
+            <label for="gender" class="block text-lg font-semibold mb-2">Gender</label>
+            <input type="text" id="gender" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" formControlName="gender"/>
+          </div>
+          <div>
+            <label for="department" class="block text-lg font-semibold mb-2">Department</label>
+            <input type="text" id="department" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" formControlName="department"/>
+          </div>
+          <div>
+            <label for="designation" class="block text-lg font-semibold mb-2">Designation</label>
+            <input type="text" id="designation" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" formControlName="designation"/>
+          </div>
+          <div>
+            <label for="basicSalary" class="block text-lg font-semibold mb-2">Basic Salary</label>
+            <input type="number" id="basicSalary" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" formControlName="basicSalary" (ngModelChange)="calculatedAllowances()"/>
+          </div>
+          <!-- Non-editable fields -->
+          <div>
+            <label for="dearnessAllowance" class="block text-lg font-semibold mb-2">Dearness Allowance</label>
+            <input type="text" id="dearnessAllowance" class="w-full p-2 border border-gray-300 rounded-md shadow-sm bg-gray-100" [value]="dearnessAllowance" readonly/>
+          </div>
+          <div>
+            <label for="conveyanceAllowance" class="block text-lg font-semibold mb-2">Conveyance Allowance</label>
+            <input type="text" id="dearnessAllowance" class="w-full p-2 border border-gray-300 rounded-md shadow-sm bg-gray-100" [value]="conveyanceAllowance" readonly/>
+          </div>
+          <div>
+            <label for="hra" class="block text-lg font-semibold mb-2">HRA</label>
+            <input type="text" id="hra" class="w-full p-2 border border-gray-300 rounded-md shadow-sm bg-gray-100" [value]="hra" readonly/>
+          </div>
+          <div>
+            <label for="grossSalary" class="block text-lg font-semibold mb-2">Gross Salary</label>
+            <input type="text" id="grossSalary" class="w-full p-2 border border-gray-300 rounded-md shadow-sm bg-gray-100" [value]="grossSalary" readonly/>
+          </div>
+          <div class="col-span-2 mt-4">
+            <button type="submit" class="w-full bg-blue-500 text-white p-3 rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Add Employee</button>
+          </div>
+        </div>
+      </form>
+
+      <div class="mt-8">
+        <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+          <thead>
+            <tr class="bg-gray-200 text-gray-700">
+              <th class="py-3 px-6 text-left">Employee Id</th>
+              <th class="py-3 px-6 text-left">Employee Name</th>
+              <th class="py-3 px-6 text-left">Date of Birth</th>
+              <th class="py-3 px-6 text-left">Gender</th>
+              <th class="py-3 px-6 text-left">Department</th>
+              <th class="py-3 px-6 text-left">Designation</th>
+              <th class="py-3 px-6 text-left">Basic Salary</th>
+              <th class="py-3 px-6 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let employee of employees" class="hover:bg-gray-100">
+              <td class="py-3 px-6">{{ employee.employeeCode }}</td>
+              <td class="py-3 px-6">{{ employee.employeeName }}</td>
+              <td class="py-3 px-6">{{ employee.dateOfBirth | date:'shortDate' }}</td>
+              <td class="py-3 px-6">{{ employee.gender }}</td>
+              <td class="py-3 px-6">{{ employee.department }}</td>
+              <td class="py-3 px-6">{{ employee.designation }}</td>
+              <td class="py-3 px-6">{{ employee.basicSalary | currency:'INR':'symbol':'1.2-2' }}</td>
+              <td class="py-3 px-6">
+                <button (click)="editEmployee(employee.employeeCode)" class="bg-yellow-500 text-white py-1 px-3 rounded-md shadow-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500">Edit</button>
+                <button (click)="deleteEmployee(employee.employeeCode)" class="bg-red-500 text-white py-1 px-3 rounded-md shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
